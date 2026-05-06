@@ -20,7 +20,7 @@ function createWindow() {
   const isDev = !app.isPackaged;
 
   if (isDev) {
-    mainWindow.loadURL("http://localhost:3000");
+    mainWindow.loadURL("http://localhost:8000");
   } else {
     mainWindow.loadFile(path.join(__dirname, "../renderer/out/index.html"));
   }
@@ -44,3 +44,7 @@ app.on("activate", () => {
     createWindow();
   }
 });
+
+if (!app) {
+  throw new Error("Electron not loaded properly");
+}

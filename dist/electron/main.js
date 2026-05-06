@@ -1,44 +1,64 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const electron_1 = require("electron");
-const path_1 = __importDefault(require("path"));
-let mainWindow = null;
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+
+// electron/main.ts
+var import_electron = require("electron");
+var import_path = __toESM(require("path"));
+var mainWindow = null;
 function createWindow() {
-    mainWindow = new electron_1.BrowserWindow({
-        width: 1300,
-        height: 800,
-        minWidth: 1000,
-        minHeight: 600,
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            preload: path_1.default.join(__dirname, "preload.js")
-        }
-    });
-    // 👉 Next.js dev server
-    const isDev = !electron_1.app.isPackaged;
-    if (isDev) {
-        mainWindow.loadURL("http://localhost:3000");
+  mainWindow = new import_electron.BrowserWindow({
+    width: 1300,
+    height: 800,
+    minWidth: 1e3,
+    minHeight: 600,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: import_path.default.join(__dirname, "preload.js")
     }
-    else {
-        mainWindow.loadFile(path_1.default.join(__dirname, "../renderer/out/index.html"));
-    }
-    mainWindow.on("closed", () => {
-        mainWindow = null;
-    });
+  });
+  const isDev = !import_electron.app.isPackaged;
+  if (isDev) {
+    mainWindow.loadURL("http://localhost:8000");
+  } else {
+    mainWindow.loadFile(import_path.default.join(__dirname, "../renderer/out/index.html"));
+  }
+  mainWindow.on("closed", () => {
+    mainWindow = null;
+  });
 }
-electron_1.app.whenReady().then(createWindow);
-// macOS support
-electron_1.app.on("window-all-closed", () => {
-    if (process.platform !== "darwin") {
-        electron_1.app.quit();
-    }
+import_electron.app.whenReady().then(createWindow);
+import_electron.app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    import_electron.app.quit();
+  }
 });
-electron_1.app.on("activate", () => {
-    if (electron_1.BrowserWindow.getAllWindows().length === 0) {
-        createWindow();
-    }
+import_electron.app.on("activate", () => {
+  if (import_electron.BrowserWindow.getAllWindows().length === 0) {
+    createWindow();
+  }
 });
+if (!import_electron.app) {
+  throw new Error("Electron not loaded properly");
+}
